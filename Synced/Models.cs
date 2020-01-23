@@ -12,12 +12,22 @@ namespace Synced
 
     internal class ColumnModel
     {
-        [Attributes.Identity]
         public string Name { get; set; }
-        public int SizeModifier { get; set; }
+        public IEnumerable<int> Parameters { get; set; }
+        public bool ParameterCanBeMax
+        {
+            get
+            {
+                return ColumnTypeHelpers.GetParameterCanBeMax(DataType);
+            }
+        }
+
         public bool AllowsNulls { get; set; } = false;
         public bool Unique { get; set; } = false;
         public bool IsIdentity { get; set; } = false;
+        public int Seed { get; set; } = 0;
+        public int Increment { get; set; } = 0;
+        public bool PrimaryKey { get; set; } = false;
         public ColumnType DataType { get; set; } = ColumnType.varchar;
     }
 }

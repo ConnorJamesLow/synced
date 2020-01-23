@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Synced.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
-    sealed class DataType : Attribute
+    public sealed class DataType : Attribute
     {
 
         public ColumnType ColumnType { get; set; }
         public int SizeModifier { get; set; }
+        public int SizeModifier2 { get; set; } = 0;
 
         // This is a positional argument
         public DataType(ColumnType type)
@@ -21,6 +20,13 @@ namespace Synced.Attributes
         {
             ColumnType = type;
             SizeModifier = size;
+        }
+
+        public DataType(ColumnType type, int precision, int scale)
+        {
+            ColumnType = type;
+            SizeModifier = precision;
+            SizeModifier2 = precision;
         }
 
     }
