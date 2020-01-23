@@ -30,7 +30,7 @@ namespace Synced
             };
 
             // Get the public properties of this type
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public);
+            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             // Build the data for table columns
             List<ColumnModel> columns = new List<ColumnModel>();
@@ -61,18 +61,31 @@ namespace Synced
             System.Text.StringBuilder columnsSql = new System.Text.StringBuilder();
             schema.Columns.ToList().ForEach(c =>
             {
+                // Get size modifier
+                int[] parameters = c.Parameters.ToArray();
+                string sizeString = "";
+                if (parameters.Length == 1)
+                {
+                    string value = parameters[0] > 0
+                        ? parameters[0].ToString()
+                        : ( c.ParameterCanBeMax ? "MAX" : "1" );
+                    sizeString = $"({parameters[0]})";
+                }
+                else if (parameters.Length > 1)
+                {
+                    sizeString = $"({parameters[0]},{parameters[1]})";
+                }
+
+                // Create column sql
                 columnsSql.Append(@$",
-    [{c.Name}] [{c.DataType.ToString()}] {( c.IsIdentity ? $"IDENTITY({c.Seed},{c.Increment})" : "" )} {( c.AllowsNulls ? "" : "NOT" )} NULL");
+    [{c.Name}] [{c.DataType.ToString()}]{sizeString} {( c.IsIdentity ? $"IDENTITY({c.Seed},{c.Increment})" : "" )} {( c.AllowsNulls ? "" : "NOT" )} NULL");
             });
             string sql = @$"SET ANSI_NULLS ON
-GO
 
 SET QUOTED_IDENTIFIER ON
-GO
 
 CREATE TABLE {schema.Name} ({columnsSql.ToString().Substring(1)}
 ) ON [PRIMARY]
-GO
     ";
 
             // Connect to the database and create the table
@@ -105,9 +118,9 @@ GO
             {
                 return attribute.ColumnType;
             }
-            else if (DefaultTypeMapping.ContainsKey(property.GetType()))
+            else if (DefaultTypeMapping.ContainsKey(property.PropertyType))
             {
-                return DefaultTypeMapping[property.GetType()];
+                return DefaultTypeMapping[property.PropertyType];
             }
             return ColumnType.varchar;
         }

@@ -10,6 +10,8 @@ namespace Synced.Attributes
         public int SizeModifier { get; set; }
         public int SizeModifier2 { get; set; } = 0;
 
+
+
         // This is a positional argument
         public DataType(ColumnType type)
         {
