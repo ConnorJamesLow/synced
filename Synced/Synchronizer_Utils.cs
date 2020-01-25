@@ -34,9 +34,9 @@ SELECT 0 AS [Exists]";
             return ExecuteSingleReturn<int>(command) > 0;
         }
 
-        public SqlCommand CreateCommand(string sql) => new SqlCommand(sql);
+        private SqlCommand CreateCommand(string sql) => new SqlCommand(sql);
 
-        public void ExecuteCommand(SqlCommand command)
+        private void ExecuteCommand(SqlCommand command)
         {
             command.Connection = new SqlConnection(_connection);
             command.Connection.Open();
@@ -44,7 +44,7 @@ SELECT 0 AS [Exists]";
             command.Connection.Close();
         }
 
-        public T ExecuteSingleReturn<T>(SqlCommand command)
+        private T ExecuteSingleReturn<T>(SqlCommand command)
         {
             T result;
             try
@@ -72,7 +72,7 @@ SELECT 0 AS [Exists]";
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        public ColumnType GetColumnType(PropertyInfo property)
+        private ColumnType GetColumnType(PropertyInfo property)
         {
             DataType attribute = property.GetCustomAttribute<DataType>();
             if (attribute != null)
@@ -86,7 +86,7 @@ SELECT 0 AS [Exists]";
             return ColumnType.varchar;
         }
 
-        public int[] GetSizeModifier(PropertyInfo property, int parameterCount = 0)
+        private int[] GetSizeModifier(PropertyInfo property, int parameterCount = 0)
         {
             if (parameterCount == 0)
             {
@@ -120,7 +120,7 @@ SELECT 0 AS [Exists]";
         /// <summary>
         /// Provides some default mappings between C# data types and T-SQL data types.
         /// </summary>
-        public Dictionary<Type, ColumnType> DefaultTypeMapping = new Dictionary<Type, ColumnType>
+        private Dictionary<Type, ColumnType> DefaultTypeMapping = new Dictionary<Type, ColumnType>
         {
             { typeof(bool), ColumnType.bit },
             { typeof(int), ColumnType.@int },
