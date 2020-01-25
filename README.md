@@ -51,10 +51,10 @@ Synced also provides attributes to apply to your class properties which tell it 
 Some ideas for next features:  
 
 
- - [] Add `TryUpdate` ability, i.e. if a table exists and has rows, determine whether it would be possible to update the current records to match the new schema.
- - [] Add Primary Keys
- - [] Add Unique Keys
- - [] Check if a table update is even necessary (i.e. if the structure hasn't changed).
- - [] Add MySQL Support
- - [] Add a `SyncCollection` method that uses a class as a schema for the Database, with properties as tables.
- - [] Use Native attributes as alternatives to Synced.Attributes, e.g. `System.ComponentModel.DataAnnotations`.
+ - [ ] Add `TryUpdate` ability, i.e. if a table exists and has rows, determine whether it would be possible to update the current records to match the new schema.
+ - [ ] Add Primary Keys
+ - [ ] Add Unique Keys
+ - [ ] Check if a table update is even necessary (i.e. if the structure hasn't changed).
+ - [ ] Add MySQL Support
+ - [ ] Add a `SyncCollection` method that uses a class as a schema for the Database, with properties as tables.
+ - [ ] Use Native attributes as alternatives to Synced.Attributes, e.g. `System.ComponentModel.DataAnnotations`.
