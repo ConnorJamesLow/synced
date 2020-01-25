@@ -43,7 +43,7 @@ synchronizer.CreateTable(tableName);
 #### Synced.Attributes namespace
 Synced also provides attributes to apply to your class properties which tell it how to structure the table columns:
  * `AllowNulls`: `NULL` instead of default `NOT NULL`.
- * `DataType(type: ColumnType, [size: int, [scale: int]])`: Override the default binding for a C# type to a SQL type. Use the `ColumnTypes` enum to assign. Example: `[DataType(ColumnType.nvarchar, 500)]` becomes `nvarchar(500)`.
+ * `DataType(type: ColumnType, [size: int, [scale: int]])`: Override the default binding for a C# type to a SQL type. Use the `ColumnType` enum to assign. **Example:** `[DataType(ColumnType.nvarchar, 123)]` becomes `nvarchar(123)`.
  * `DataSize(size: int | scale: int, precision: int)`: Targets the size portion of the DataType (i.e. the last two parameters of `DataType`).
  * `Identity([seed: int, increment: int])`: Sets the identity of a table. Optionally set the seed and increment.
 
@@ -52,9 +52,9 @@ Some ideas for next features:
 
 
  - [ ] Add `TryUpdate` ability, i.e. if a table exists and has rows, determine whether it would be possible to update the current records to match the new schema.
- - [ ] Add Primary Keys
- - [ ] Add Unique Keys
+ - [ ] Add Primary Keys.
+ - [ ] Add Unique Keys.
  - [ ] Check if a table update is even necessary (i.e. if the structure hasn't changed).
- - [ ] Add MySQL Support
  - [ ] Add a `SyncCollection` method that uses a class as a schema for the Database, with properties as tables.
  - [ ] Use Native attributes as alternatives to Synced.Attributes, e.g. `System.ComponentModel.DataAnnotations`.
+ - [ ] Add MySQL Support (*pretty low priority, I dislike MySQL*).
