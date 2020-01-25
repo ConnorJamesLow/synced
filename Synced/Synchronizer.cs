@@ -15,16 +15,21 @@ namespace Synced
             _connection = connectionString;
         }
 
-        public void SyncTable<T>(bool emptyTable = false)
+        public void SyncTable<T>(SyncFlags flags)
         {
+
             Type type = typeof(T);
             string tableName = type.FullName;
             if (TableExists(tableName))
             {
                 if (TableHasRows(tableName))
                 {
-                    // TODO Update table
-                    return;
+                    if (!CompareFlag(flags, SyncFlags.ForceDrop))
+                    {
+                        // TODO Try Update table
+                        return;
+                    }
+                    DeleteRecords(tableName);
                 }
                 DropTable(tableName);
             }
@@ -108,6 +113,16 @@ CREATE TABLE {schema.Name} ({columnsSql.ToString().Substring(1)}
             ExecuteCommand(command);
         }
 
+        /// <summary>
+        /// DROP a table.
+        /// </summary>
+        /// <param name="tableName"></param>
         public void DropTable(string tableName) => ExecuteCommand(CreateCommand($@"DROP TABLE [dbo].{tableName}"));
+
+        /// <summary>
+        /// Delete all records from a table.
+        /// </summary>
+        /// <param name="tableName"></param>
+        public void DeleteRecords(string tableName) => ExecuteCommand(CreateCommand($@"DELETE FROM [dbo].{tableName}"));
     }
 }

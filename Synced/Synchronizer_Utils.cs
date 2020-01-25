@@ -9,6 +9,8 @@ namespace Synced
 {
     public partial class Synchronizer
     {
+        private bool CompareFlag(SyncFlags flag, SyncFlags compare) => ( flag & compare ) == compare;
+
         public bool TableExists(string tableName)
         {
             string sql = @"IF (EXISTS (
