@@ -15,17 +15,18 @@ namespace Synced
             _connection = connectionString;
         }
 
-        public void SyncTable<T>()
+        public void SyncTable<T>(bool emptyTable = false)
         {
             Type type = typeof(T);
             string tableName = type.FullName;
             if (TableExists(tableName))
             {
-                if(TableHasRows(tableName))
+                if (TableHasRows(tableName))
                 {
                     // TODO Update table
                     return;
                 }
+                DropTable(tableName);
             }
             CreateTable(type);
         }
@@ -106,5 +107,7 @@ CREATE TABLE {schema.Name} ({columnsSql.ToString().Substring(1)}
             SqlCommand command = CreateCommand(sql);
             ExecuteCommand(command);
         }
+
+        public void DropTable(string tableName) => ExecuteCommand(CreateCommand($@"DROP TABLE [dbo].{tableName}"));
     }
 }
