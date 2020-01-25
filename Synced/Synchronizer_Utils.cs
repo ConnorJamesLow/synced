@@ -120,7 +120,7 @@ SELECT 0 AS [Exists]";
         /// <summary>
         /// Provides some default mappings between C# data types and T-SQL data types.
         /// </summary>
-        private Dictionary<Type, ColumnType> DefaultTypeMapping = new Dictionary<Type, ColumnType>
+        public Dictionary<Type, ColumnType> DefaultTypeMapping = new Dictionary<Type, ColumnType>
         {
             { typeof(bool), ColumnType.bit },
             { typeof(int), ColumnType.@int },

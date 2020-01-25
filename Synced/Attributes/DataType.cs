@@ -18,16 +18,16 @@ namespace Synced.Attributes
             ColumnType = type;
         }
 
-        public DataType(ColumnType type, int size)
+        public DataType(ColumnType type, int scale)
         {
             ColumnType = type;
-            SizeModifier = size;
+            SizeModifier = scale;
         }
 
-        public DataType(ColumnType type, int precision, int scale)
+        public DataType(ColumnType type, int scale, int precision)
         {
             ColumnType = type;
-            SizeModifier = precision;
+            SizeModifier = scale;
             SizeModifier2 = precision;
         }
 

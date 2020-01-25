@@ -43,7 +43,7 @@ synchronizer.CreateTable(tableName);
 #### Synced.Attributes namespace
 Synced also provides attributes to apply to your class properties which tell it how to structure the table columns:
  * `AllowNulls`: `NULL` instead of default `NOT NULL`.
- * `DataType(type: ColumnType, [size: int, [scale: int]])`: Override the default binding for a C# type to a SQL type. Use the `ColumnType` enum to assign. **Example:** `[DataType(ColumnType.nvarchar, 123)]` becomes `nvarchar(123)`.
+ * `DataType(type: ColumnType, [scale: int, [precision: int]])`: Override the default binding for a C# type to a SQL type. Use the `ColumnType` enum to assign. **Example:** `[DataType(ColumnType.nvarchar, 123)]` becomes `nvarchar(123)`.
  * `DataSize(size: int | scale: int, precision: int)`: Targets the size portion of the DataType (i.e. the last two parameters of `DataType`).
  * `Identity([seed: int, increment: int])`: Sets the identity of a table. Optionally set the seed and increment.
 
