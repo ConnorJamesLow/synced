@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Microsoft.Data.SqlClient;
 using Synced.Attributes;
@@ -86,8 +85,9 @@ SELECT 0 AS [Exists]";
             return ColumnType.varchar;
         }
 
-        private int[] GetSizeModifier(PropertyInfo property, int parameterCount = 0)
+        private int[] GetSizeModifier(PropertyInfo property, ColumnType type)
         {
+            int parameterCount = ColumnTypeHelpers.GetParameterCount(type);
             if (parameterCount == 0)
             {
                 return new int[] { };

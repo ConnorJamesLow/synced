@@ -19,7 +19,7 @@ namespace Synced
         {
 
             Type type = typeof(T);
-            string tableName = type.FullName;
+            string tableName = type.Name;
             if (TableExists(tableName))
             {
                 if (TableHasRows(tableName))
@@ -57,11 +57,12 @@ namespace Synced
             foreach (PropertyInfo property in properties)
             {
                 Identity identity = property.GetCustomAttribute<Identity>();
+                ColumnType columnType = GetColumnType(property);
                 ColumnModel column = new ColumnModel
                 {
                     Name = property.Name,
-                    DataType = GetColumnType(property),
-                    Parameters = GetSizeModifier(property),
+                    DataType = columnType,
+                    Parameters = GetSizeModifier(property, columnType),
                     AllowsNulls = property.GetCustomAttribute<AllowNulls>() != null,
                     Unique = property.GetCustomAttribute<Unique>() != null,
                     IsIdentity = identity != null
@@ -89,7 +90,7 @@ namespace Synced
                     string value = parameters[0] > 0
                         ? parameters[0].ToString()
                         : ( c.ParameterCanBeMax ? "MAX" : "1" );
-                    sizeString = $"({parameters[0]})";
+                    sizeString = $"({value})";
                 }
                 else if (parameters.Length > 1)
                 {

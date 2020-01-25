@@ -20,7 +20,7 @@ synchronizer.SyncTable<AnotherClass>(Synced.SyncFlags.ForceDrop);
 The `Synchronize` class also exposes the logical components of the `SyncTable` method:  
 ```C#
 Type table = typeof(MyClass);
-string tableName = table.FullName;
+string tableName = table.Name;
 
 // Check to see if the INFORMATION_SCHEMA.TABLES contains a table with the given name.
 if (synchronizer.TableExists(tableName)) {
