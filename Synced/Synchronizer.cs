@@ -15,7 +15,7 @@ namespace Synced
             _connection = connectionString;
         }
 
-        public void SyncTable<T>(SyncFlags flags)
+        public void SyncTable<T>(SyncFlags flags = SyncFlags.None)
         {
 
             Type type = typeof(T);
@@ -105,8 +105,7 @@ namespace Synced
 SET QUOTED_IDENTIFIER ON
 
 CREATE TABLE {schema.Name} ({columnsSql.ToString().Substring(1)}
-) ON [PRIMARY]
-    ";
+) ON [PRIMARY]";
 
             // Connect to the database and create the table
             SqlCommand command = CreateCommand(sql);
