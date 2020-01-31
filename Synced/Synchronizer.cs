@@ -58,7 +58,6 @@ namespace Synced
 
             // Build the data for table columns
             List<ColumnModel> columns = new List<ColumnModel>();
-            List<ColumnModel> uniqueColumns = new List<ColumnModel>();
             foreach (PropertyInfo property in properties)
             {
                 Identity identity = property.GetCustomAttribute<Identity>();
