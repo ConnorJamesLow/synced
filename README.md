@@ -1,5 +1,5 @@
 # Synced
-###### v0.1.1
+###### v0.2.0
 A simple .NET library for building SQL tables from C# classes.  
 
 ## Features

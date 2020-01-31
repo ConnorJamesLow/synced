@@ -15,10 +15,10 @@ namespace Synced
             _connection = connectionString;
         }
 
-        public void SyncTable<T>(SyncFlags flags = SyncFlags.None)
-        {
+        public void SyncTable<T>(SyncFlags flags = SyncFlags.None) => SyncTable(typeof(T), flags);
 
-            Type type = typeof(T);
+        public void SyncTable(Type type, SyncFlags flags = SyncFlags.None)
+        {
             string tableName = type.Name;
             if (TableExists(tableName))
             {
@@ -36,6 +36,10 @@ namespace Synced
             CreateTable(type);
         }
 
+        /// <summary>
+        /// Generate a CREATE TABLE command for the given Type and execute it against the connected Database.
+        /// </summary>
+        /// <param name="type"></param>
         public void CreateTable(Type type)
         {
             if (type.FullName.StartsWith("System"))
