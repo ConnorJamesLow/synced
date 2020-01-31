@@ -67,6 +67,8 @@ namespace Synced
                     Unique = property.GetCustomAttribute<Unique>() != null,
                     IsIdentity = identity != null
                 };
+
+                // Set Identity attributes
                 if (column.IsIdentity)
                 {
                     column.Seed = identity.Seed;
@@ -101,6 +103,24 @@ namespace Synced
                 columnsSql.Append(@$",
     [{c.Name}] [{c.DataType.ToString()}]{sizeString} {( c.IsIdentity ? $"IDENTITY({c.Seed},{c.Increment})" : "" )} {( c.AllowsNulls ? "" : "NOT" )} NULL");
             });
+
+            // Set the primary key
+            ColumnModel keyColumn = GetPrimaryKey(schema);
+            if (keyColumn != default)
+            {
+                columnsSql.Append(@$",
+    CONSTRAINT [PK_{schema.Name}] PRIMARY KEY CLUSTERED (
+		[{keyColumn.Name}] ASC
+	) WITH (
+		PAD_INDEX = OFF,
+		STATISTICS_NORECOMPUTE = OFF,
+		IGNORE_DUP_KEY = OFF, 
+		ALLOW_ROW_LOCKS = ON, 
+		ALLOW_PAGE_LOCKS = ON
+	) ON [PRIMARY]");
+            }
+
+            // Create the CREATE TABLE Sql.
             string sql = @$"SET ANSI_NULLS ON
 
 SET QUOTED_IDENTIFIER ON

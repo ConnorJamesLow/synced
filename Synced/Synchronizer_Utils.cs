@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Data.SqlClient;
 using Synced.Attributes;
@@ -24,6 +25,8 @@ SELECT 0 AS [Exists]";
             command.Parameters.AddWithValue("@Table", tableName);
             return ExecuteSingleReturn<int>(command) == 1;
         }
+
+        private ColumnModel GetPrimaryKey(TableModel model) => model.Columns.FirstOrDefault(i => i.IsIdentity);
 
         public bool TableHasRows(string tableName)
         {
@@ -64,8 +67,6 @@ SELECT 0 AS [Exists]";
             return result;
         }
 
-
-
         /// <summary>
         /// Gets the best guess <see cref="ColumnType"/> related to a property.
         /// </summary>
@@ -73,6 +74,7 @@ SELECT 0 AS [Exists]";
         /// <returns></returns>
         private ColumnType GetColumnType(PropertyInfo property)
         {
+            // First, try to get the ColumnType from the attribute.
             DataType attribute = property.GetCustomAttribute<DataType>();
             if (attribute != null)
             {
@@ -80,11 +82,25 @@ SELECT 0 AS [Exists]";
             }
             else if (DefaultTypeMapping.ContainsKey(property.PropertyType))
             {
+                // If the attribute is not available, but a default mapping exists, use that.
                 return DefaultTypeMapping[property.PropertyType];
             }
+            else if (typeof(IEnumerable<byte>).IsAssignableFrom(property.PropertyType))
+            {
+                // Additionally, try for binary.
+                return ColumnType.binary;
+            }
+
+            // Return varchar by default.
             return ColumnType.varchar;
         }
 
+        /// <summary>
+        /// For scalable data types, gets the scale (and precision in some cases).
+        /// </summary>
+        /// <param name="property"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private int[] GetSizeModifier(PropertyInfo property, ColumnType type)
         {
             int parameterCount = ColumnTypeHelpers.GetParameterCount(type);
@@ -114,7 +130,7 @@ SELECT 0 AS [Exists]";
                 }
                 return new int[] { typeAttribute.SizeModifier };
             }
-            return new int[] { 0 };
+            return parameterCount == 2 ? new int[] { 0, 0 } : new int[] { 0 };
         }
 
         /// <summary>
@@ -133,6 +149,8 @@ SELECT 0 AS [Exists]";
             { typeof(float), ColumnType.@float },
             { typeof(byte), ColumnType.tinyint },
             { typeof(string), ColumnType.varchar },
+
+            // this needs additional checks, e.g. in GetColumnType
             { typeof(IEnumerable<byte>), ColumnType.binary },
             { typeof(DateTime), ColumnType.datetime }
         };

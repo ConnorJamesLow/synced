@@ -1,5 +1,5 @@
 # Synced
-###### v0.1.0
+###### v0.1.1
 A simple .NET library for building SQL tables from C# classes.  
 
 ## Features
@@ -52,9 +52,8 @@ Some ideas for next features:
 
 
  - [ ] Add `TryUpdate` ability, i.e. if a table exists and has rows, determine whether it would be possible to update the current records to match the new schema.
- - [ ] Add Primary Keys.
+ - [x] Add Primary Keys.
  - [ ] Add Unique Keys.
  - [ ] Check if a table update is even necessary (i.e. if the structure hasn't changed).
  - [ ] Add a `SyncCollection` method that uses a class as a schema for the Database, with properties as tables.
  - [ ] Use Native attributes as alternatives to Synced.Attributes, e.g. `System.ComponentModel.DataAnnotations`.
- - [ ] Add MySQL Support (*pretty low priority, I dislike MySQL*).
