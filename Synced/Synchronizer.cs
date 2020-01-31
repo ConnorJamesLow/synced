@@ -122,6 +122,21 @@ namespace Synced
 		ALLOW_PAGE_LOCKS = ON
 	) ON [PRIMARY]");
                 }
+
+                // Add Unique Key
+                if (c.Unique)
+                {
+                    columnsSql.Append(@$",
+	CONSTRAINT [UK_{schema.Name}_{c.Name}] UNIQUE NONCLUSTERED (
+		[{c.Name}] ASC
+	) WITH (
+		PAD_INDEX = OFF,
+		STATISTICS_NORECOMPUTE = OFF,
+		IGNORE_DUP_KEY = OFF, 
+		ALLOW_ROW_LOCKS = ON, 
+		ALLOW_PAGE_LOCKS = ON
+    ) ON [PRIMARY]");
+                }
             });
 
             // Create the CREATE TABLE Sql.
