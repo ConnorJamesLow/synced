@@ -58,6 +58,7 @@ namespace Synced
 
             // Build the data for table columns
             List<ColumnModel> columns = new List<ColumnModel>();
+            List<ColumnModel> uniqueColumns = new List<ColumnModel>();
             foreach (PropertyInfo property in properties)
             {
                 Identity identity = property.GetCustomAttribute<Identity>();
@@ -106,15 +107,13 @@ namespace Synced
                 // Create column sql
                 columnsSql.Append(@$",
     [{c.Name}] [{c.DataType.ToString()}]{sizeString} {( c.IsIdentity ? $"IDENTITY({c.Seed},{c.Increment})" : "" )} {( c.AllowsNulls ? "" : "NOT" )} NULL");
-            });
 
-            // Set the primary key
-            ColumnModel keyColumn = GetPrimaryKey(schema);
-            if (keyColumn != default)
-            {
-                columnsSql.Append(@$",
+                // Add Primary Key
+                if (c.IsIdentity)
+                {
+                    columnsSql.Append(@$",
     CONSTRAINT [PK_{schema.Name}] PRIMARY KEY CLUSTERED (
-		[{keyColumn.Name}] ASC
+		[{c.Name}] ASC
 	) WITH (
 		PAD_INDEX = OFF,
 		STATISTICS_NORECOMPUTE = OFF,
@@ -122,7 +121,8 @@ namespace Synced
 		ALLOW_ROW_LOCKS = ON, 
 		ALLOW_PAGE_LOCKS = ON
 	) ON [PRIMARY]");
-            }
+                }
+            });
 
             // Create the CREATE TABLE Sql.
             string sql = @$"SET ANSI_NULLS ON
